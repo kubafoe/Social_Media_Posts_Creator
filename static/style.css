@@ -1,0 +1,12 @@
+*{
+    text-align: center;
+}
+body{
+    background: linear-gradient(to top left, whitesmoke, aqua);
+}
+
+p #odpowiedz{
+    margin-left: 20px;
+    height: 400px;
+    width: 800px;
+}

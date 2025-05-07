@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<h1>Post na {{ form["platforma"] }} z dnia: {{ data }} </h1>
+<hr/>
+<ul id="dane">
+<li class="dane" style="text-align: left;">Temat: {{ form["temat"] }}</li>
+<li class="dane" style="text-align: left;">Cel: {{ form["cel"] }}</li>
+<li class="dane" style="text-align: left;">Kontekst: {{ form["kontekst"] }}</li>
+<li class="dane" style="text-align: left;">Dodatkowe informacje: {{ form["dodatkowe"] }}</li>
+</ul>
+<hr/>
+<p id="pdf_odpowiedz">
+{{ odpowiedz }}
+</p>
+<br>
+<hr/>
+<footer> &copy;; Created by Jakub Foetke & Ollama-Gemma3</footer>
