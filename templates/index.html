@@ -17,44 +17,45 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <h1>Social Media Posts Creator</h1>
 <form action="/send_bot" method="post">
-    Temat: <input type="text" name="temat" id="temat" required><br><br>
-    Cel: <input type="text" name="cel" id="cel"><br><br>
-    Wybór platformy:
-    <select name="platformy" id="platformy">
+    Topic: <input type="text" name="topic" id="topic" required><br><br>
+    Goal: <input type="text" name="goal" id="goal"><br><br>
+    Choose platform:
+    <select name="platform" id="platformy">
         <option value="instagram">Instagram</option>
         <option value="facebook">Facebook</option>
         <option value="linkedin">Linkedin</option>
+        <option value="X">X/Twitter</option>
         </select><br><br>
-    Kontekst:<input type="text" id="kontekst" name="kontekst" size="50px" required><br><br>
-    Informacja dodatkowe: <br> <textarea id="dodatkowe" name="dodatkowe" rows="4" cols="50"></textarea><br><br>
-    <input type="submit" value="Wyślij"> 
+    Context:<input type="text" id="details" name="details" size="50px" required><br><br>
+    More details: <br> <textarea id="more_information" name="more_information" rows="4" cols="50"></textarea><br><br>
+    <input type="submit" value="Submit"> 
     </form>
-    LUB <br>
-    Wybierz prompt Niestandardowy
-    <form action="/niestandardowe" method="post">
-        <input type="submit" value="Niestandardowy">
+    OR <br>
+    Choose Custom Opiton:
+    <form action="/custom" method="post">
+        <input type="submit" value="Custom">
     </form>
-{{ error }} {{ pdf_rezultat }}
+{{ error }} {{ pdf_result }}
 <br>
-{% if odpowiedz %}
-  <form method="POST" action="/pobierz_pdf">
-    <input type="submit" value="Pobierz PDF" id="pobierz_pdf">
+{% if respond %}
+  <form method="POST" action="/download_pdf">
+    <input type="submit" value="Download PDF" id="pobierz_pdf">
   </form><hr>
 {% endif %}
-{% if pobierz_pdf %}
-<a href="{{ url_for('static', filename='pdf/post_{{ platforma }}_{{ data }}.pdf') }}" download>Pobierz PDF</a>
+{% if pdf_result %}
+<a href="{{ url_for('static', filename='pdf/post_SocialMedias_({today_date}).pdf') }}" download>Pobierz PDF</a>
 {% endif %}
 <br>
-{% if odpowiedz %}
+{% if respond %}
 <hr/>
 {% endif %}
 <div id="wygenerowany_elemnt">
     Odpowiedź:
     <p id="odpowiedz">
-       <textarea name="prompt" id="prompt" readonly=True rows="8" cols="60"> {{ odpowiedz }} </textarea>
+       <textarea name="prompt" id="prompt" readonly=True rows="8" cols="60"> {{ respond }} </textarea>
     </p>
 </div>
-{% if odpowiedz %}
+{% if respond %}
 <hr/>
 {% endif %}
 </body>

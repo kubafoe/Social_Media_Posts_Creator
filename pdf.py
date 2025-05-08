@@ -6,7 +6,7 @@ import datetime as dt
 
 from config import BASE_DIR,WKHTMLTOPDF_PATH
 from dotenv import load_dotenv
-from flask import Flask, app, request, render_template,session,make_response
+from flask import app, request, render_template,session
 
 os.chdir("D:\\Programowanie\\Projekt-Formularz-do-Tworzenia postów-w-Social-Mediach")
 
@@ -14,46 +14,48 @@ os.chdir("D:\\Programowanie\\Projekt-Formularz-do-Tworzenia postów-w-Social-Med
 load_dotenv()
 app.secret_key = os.getenv('SECRET_KEY')
 
-# Wczytaj dane z formularza -> stwórz PDF 
-def pobierz_pdf():
-    # Wczytaj dane z formularza
-    odpowiedz = session.get('odpowiedz')
-    form = session.get('form')
-    if not form:
-        print("Błąd: Zmienna 'form' nie istnieje w sesji.")
-        return "Błąd: Brak danych formularza w sesji."
 
-    required_keys = ["platforma", "temat", "cel", "kontekst", "dodatkowe"]
+# Read data_form -> Create PDF 
+def download_pdf():
+    # Wczytaj dane z formularza
+    respond = session.get('respond')
+    form = session.get('forms')
+    print(form)
+    if not form:
+        print("Error: Variable 'form' dosent exist.")
+        return "Error: Form is empty in session."
+
+    required_keys = ["platform", "topic", "goal", "details", "more_information"]
     for key in required_keys:
         if key not in form:
-            print(f"Błąd: Brakuje klucza '{key}' w 'form'.")
-            return f"Błąd: Brakuje klucza '{key}' w danych formularza."
+            print(f"Error: Unexisted '{key}' in 'form'.")
+            return f"Error: Unexisted '{key}' in form data."
 
-    print(f"Dane PDF: {form}, {form.values()} i  {form.keys()}")
+    print(f"Data PDF: {form}, {form.values()} i  {form.keys()}")
     print("")
-    print(form["temat"])
+    print(form["topic"])
     print("")
-    print(f"Zmienna odpowiedz dla funkcji pobierz_pdf() ")
+    print(f"Variable respond for function download_pdf() ")
 
     
     today_date = dt.datetime.today().strftime("%d_%m_%Y_%H_%M")
     context = {
     'form':form,
-    'platformy': form["platforma"],
-    "temat": form["temat"],
-    "cel": form['cel'],
-    'kontekst': form['kontekst'],
-    'dodatkowe': form['dodatkowe'],
-    'odpowiedz': odpowiedz,
+    'platform': form["platform"],
+    "topic": form["topic"],
+    "goal": form['goal'],
+    'details': form['details'],
+    'more_informations': form['more_information'],
+    'respond': respond,
     'data': today_date,
     }
 
-    print("Content został wygenerowany")
+    print("Content was generated")
 
     template_loader = jinja2.FileSystemLoader("D:\\Programowanie\\Projekt-Formularz-do-Tworzenia postów-w-Social-Mediach\\templates")
     template_env = jinja2.Environment(loader=template_loader)
     
-    print("Czy folder istnieje:", os.path.exists("templates"))
+    print("Check if folder exists:", os.path.exists("templates"))
     print(os.path)
 
     template = template_env.get_template("creator.html")
@@ -64,46 +66,47 @@ def pobierz_pdf():
     pdf_path = os.path.join(BASE_DIR, 'static', 'pdf', f"post_SocialMedias_{today_date}.pdf")
     css_path = os.path.join(BASE_DIR, "static", "pdf-style.css")
     if not os.path.exists(css_path):
-        print(f"Błąd: Plik CSS nie istnieje w ścieżce {css_path}")
-        return "Błąd: Plik CSS nie został znaleziony."
+        print(f"Error: File CSS dosent exist in path: {css_path}")
+        return "Error: File CSS not found."
 
-    print("Ścieżka do pliku CSS:", css_path)
-    print("Czy plik CSS istnieje:", os.path.exists(css_path))
+    print("Path for file CSS:", css_path)
+    print("IF file CSS exist:", os.path.exists(css_path))
 
     pdfkit.from_string(output_text, pdf_path, configuration=config_pdf, css=css_path)
-    pdf_rezultat = "PDF został wygenerowany"
-    return render_template('index.html', pdf_rezultat=pdf_rezultat)
+    pdf_result = "PDF is ready"
+    return render_template('index.html', pdf_result=pdf_result)
 
-def pobierz_pdf_niestandarodwe(cookie_odpowiedz_niestandardowa):
-    cookie_odpowiedz_niestandardowa = session.get("odpowiedz_niestandardowa")
-    print(cookie_odpowiedz_niestandardowa)
+#  Read custom_data_form -> Create PDF 
+def download_pdf_custom():
+    cookie_respond_custom = session.get("custom_respond")
+    print(f"Function download_pdf_custom() is working: {cookie_respond_custom}")
 
     today_date = dt.datetime.today().strftime("%d_%m_%Y_%H_%M")
 
     context = {
-    'odpowiedz_niestandardowa': cookie_odpowiedz_niestandardowa,
-    'data': today_date 
+    'custom_respond': cookie_respond_custom,
+    'date': today_date 
     }
 
     template_loader = jinja2.FileSystemLoader("D:\\Programowanie\\Projekt-Formularz-do-Tworzenia postów-w-Social-Mediach\\templates")
     template_env = jinja2.Environment(loader=template_loader)
     
-    print("Czy folder istnieje:", os.path.exists("templates"))
+    print("Check if folder exists", os.path.exists("templates"))
     print(os.path)
 
-    template = template_env.get_template("creator_niestandardowy.html")
+    template = template_env.get_template("creator_custom.html")
 
     output_text = template.render(context)
     config_pdf = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
-    pdf_path = os.path.join(BASE_DIR, 'static', 'pdf', f"post_NiestandardoweSM_{today_date}.pdf")
+    pdf_path = os.path.join(BASE_DIR, 'static', 'pdf', f"post_CustomSM_{today_date}.pdf")
     css_path = os.path.join(BASE_DIR, "static", "pdf-style.css")
     if not os.path.exists(css_path):
-        print(f"Błąd: Plik CSS nie istnieje w ścieżce {css_path}")
-        return "Błąd: Plik CSS nie został znaleziony."
+        print(f"Error: File CSS dosent exist in path: {css_path}")
+        return "Error: File CSS not found."
 
-    print("Ścieżka do pliku CSS:", css_path)
-    print("Czy plik CSS istnieje:", os.path.exists(css_path))
+    print("Path for CSS:", css_path)
+    print("IF file CSS exist:", os.path.exists(css_path))
 
     pdfkit.from_string(output_text, pdf_path, configuration=config_pdf, css=css_path)
-    pdf_rezultat_niestandardowy = "PDF został wygenerowany"
-    return render_template('niestandardowe.html', pdf_rezultat_niestandardowy=pdf_rezultat_niestandardowy)
+    pdf_result_custom = "PDF is Generated"
+    return render_template('custom.html', pdf_result_custom=pdf_result_custom)

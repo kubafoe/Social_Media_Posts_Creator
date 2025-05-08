@@ -1,7 +1,7 @@
-from flask import session, request, render_template, app, make_response
+from flask import session, request, render_template, app
 from ollama import chat
 from dotenv import load_dotenv
-from sqlite3 import connect
+# from sqlite3 import connect in future
 import os
 
 
@@ -9,82 +9,102 @@ import os
 load_dotenv()
 app.secret_key = os.getenv('SECRET_KEY')
 
-class formularz:
-    def __init__(self, temat, cel, platforma, kontekst, dodatkowe, tagi_html,model):
-        self.temat = temat
-        self.cel = cel
-        self.platforma = platforma
-        self.kontekst = kontekst
-        self.dodatkowe = dodatkowe
-        self.tagi_html = tagi_html
-        self.model = tagi_html
-        self.dane = [temat, cel, platforma, kontekst, dodatkowe, tagi_html, model]
+class data_form:
+    def __init__(self, topic, goal, platform, details, more_information, option_html):
+        self.topic = topic
+        self.goal = goal
+        self.platform = platform
+        self.details = details
+        self.more_information = more_information
+        self.option_html = option_html
+        self.data = [topic, goal, platform, details, more_information, option_html,]
 
     def to_dict(self):
         return {
-        "temat": self.temat,
-        "cel": self.cel,
-        "platforma": self.platforma,
-        "kontekst": self.kontekst,
-        "dodatkowe": self.dodatkowe,
-        "tagi_html": self.tagi_html,
-        "model": self.model
+        "topic": self.topic,
+        "goal": self.goal,
+        "platform": self.platform,
+        "details": self.details,
+        "more_information": self.more_information,
+        "option_html": self.option_html,
         }
+
+# Define rules on each SM platform.
+def platform_requier(platform):
+        if platform == "instagram":
+            platform_requier = "Instagram - Keep short, add line breaks, include emojis."
+            return platform_requier            
+        elif platform == "facebook":
+            platform_requier = "Facebook - Start strong, ask questions, use casual tone."
+            return platform_requier            
+        elif platform == "linkedin":
+            platform_requier = "Linkedin - Be professional, add value, include a call-to-action."
+            return platform_requier            
+        elif platform == "X":
+            platform_requier = "X/Twitter - Be concise, use hashtags, spark curiosity.Max 280 characters."
+            return platform_requier            
+
 
 # Wczytaj dane z formularza -> wyślij dane do AI -> wprowadź na stronie index.html
 def send_bot(): 
     # Wczytaj dane z formularza
-    form = formularz(
-    request.form.get('temat'),
-    request.form.get('cel'),
-    request.form.get('platformy'),
-    request.form.get('kontekst'),
-    request.form.get('dodatkowe'),
-    request.form.get('tagi_html')
+    form = data_form (
+    request.form.get('topic'),
+    request.form.get('goal'),
+    request.form.get('platform'),
+    request.form.get('details'),
+    request.form.get('more_information'),
+    request.form.get('option_html')
     )
     print(form.to_dict())
     print(form)
+    print(form.topic)
     
 
-    if not form.temat.strip() or not form.kontekst.strip():
-        error = "Uzupełnij wymagane pola!"
+    if not form.topic.strip() or not form.details.strip():
+        error = "Complete the required fields!"
         print(error)
         return render_template('index.html',error=error)
     else:
-        odpowiedz = wyslij_dane(form.temat,form.cel,form.platforma,form.kontekst,form.dodatkowe,form.tagi_html)
-        session['odpowiedz'] = odpowiedz
-        session['form'] = form.to_dict()
-        print("send_BOT + wyslij_dane Sukces")
-        return render_template("index.html", odpowiedz=odpowiedz)
+        respond = send_data(form.topic,form.goal,form.platform,form.details,form.more_information,form.option_html)
+        session['respond'] = respond
+        session['forms'] = form.to_dict()
+        print("send_BOT + send_data Success")
+        return render_template("index.html", respond=respond)
    
 # Wyślij dane do AI ze wczytanimi informacje z funkcji send_ bot()
-def wyslij_dane(temat,cel,platforma,kontekst,dodatkowe,tagi_html):
-    print("Wyslij dane uruchomione" )
+def send_data(topic,goal,platform,details,more_information,option_html):
 
-    prompt = f"Stwórz post w języku polskim na {platforma}, na temat {temat} w celu {cel} w kontekście {kontekst} oraz opcjonalnie zawierający: {dodatkowe}."
-    if tagi_html == '1':
-        prompt += " Ważne: użyj składni HTML."
+    print("Wyslij dane uruchomione" )
+    prompt_requier = platform_requier(platform)
+
+    prompt = f"Create a social media post for {prompt_requier} about {topic} in goal {goal} in context {details}, optionaly {more_information}"
+
+    print(prompt)
+
+    if option_html == '1':
+        prompt += " Important use html for decoration."
 
     response = chat(model="gemma3", messages=[{"role": "user", "content": prompt}])
 
     print(prompt)
-    odpowiedz = response.message.content
-    return odpowiedz
+    respond = response.message.content
+    return respond
 
-def wyslij_dane_niestandardowe():
-    prompt = request.form.get('niestandardowe_prompt')
+def send_data_custom():
+    prompt = request.form.get('custom_prompt')
     print(f"prompt = {prompt}")
     if prompt == None or prompt == "":
-        error = "Wprowadź dane do formularza!"
+        error = "Complete the required fields!"
         print(error)
-        return  render_template("niestandardowe.html", error=error)
+        return  render_template("custom.html", error=error)
     else:
         response = chat(model="gemma3", messages=[{"role": "user", "content": prompt}])
-        odpowiedz_niestandardowa = response.message.content
+        custom_respond = response.message.content
         print(f"response: {response}")
-        session['odpowiedz_niestandardowa'] = odpowiedz_niestandardowa
-        print(odpowiedz_niestandardowa)
-        return render_template("niestandardowe.html", odpowiedz_niestandardowa=odpowiedz_niestandardowa)
+        session['custom_respond'] = custom_respond
+        print(custom_respond)
+        return render_template("custom.html", custom_respond=custom_respond)
     
 
 
