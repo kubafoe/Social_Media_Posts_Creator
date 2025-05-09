@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, app, request, render_template
 from pdf import download_pdf,download_pdf_custom
 from lokal_ollama import send_bot, send_data_custom
@@ -17,7 +16,7 @@ app.secret_key = os.getenv('SECRET_KEY')
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template('index.html')  
+    return render_template('index.html') 
 
 
 @app.route('/download_pdf', methods=['POST'])
@@ -29,7 +28,7 @@ def download_pdf_route():
 def send_bot_route():
     return send_bot()
 
-@app.route('/custom', methods=["POST"])
+@app.route('/custom', methods=["POST", "GET"])
 def custom():
     return render_template("custom.html")
 

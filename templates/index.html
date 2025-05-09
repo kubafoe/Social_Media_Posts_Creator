@@ -1,21 +1,83 @@
-<!-- 1.Formularz HTML z Tematem posta, Kontekstem, Określeniem stylu , grupa docelowa, cel posta, co ma zawierac (cos od siebie),  wybor platformy social media, ewentualnym dodaniem zdjęcia.
-2.Backend: Flash/Python przyjmuje formularz łączy się z lokalnym ollamma-Gemma3, resultat zostaje wysłany do frontendu.
-3.Strona zostaje przeładowana pod formularzem zostaje dodany contener z wynikiem, przycisk akceptacji oraz polem tekstowym by uwydatnic tekst.
-4.Po akceptacji post zostaje eksportowany do json/csv i przesłany do (API/Make.com) linkedin/google sheets.
- -->
+<!-- 
+Stówrz nawigacyjne menu z możliwością wybierania elemntu oraz , na dole możliwość zalogowania się 
+Logowanie = baza danych login sqlite
+Po zalogowaniu się użytkownik bedzie mógł pobrać pdf z postami oraz wogole zapisywać dane do PDF  
+Dodaj ID do dokumentów PDF jak i odpowiedzi wygenerowanych przez Chat id - niech będzie unikalne do użytkownika
+Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (API/Make.com) linkedin/google sheets. 
+-->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- (Optional) - Place this js code after initializing bootstrap.min.js or bootstrap.bundle.min.js -->
+    <script>
+        var triggerEl = document.querySelector("#navId a");
+        bootstrap.Tab.getInstance(triggerEl).show(); // Select tab by name
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <!-- (Optional) - Place this js code after initializing bootstrap.min.js or bootstrap.bundle.min.js -->
+    <script>
+        var triggerEl = document.querySelector("#navId a");
+        bootstrap.Tab.getInstance(triggerEl).show(); // Select tab by name
+    </script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <title>SM Posts Creator</title>
 </head>
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- Nav tabs -->
+<ul
+        class="nav nav-tabs"
+        id="navId"
+        role="tablist"
+    >
+        <li class="nav-item">
+            <a
+                href="{{ url_for('index') }}"
+                class="nav-link"
+                data-bs-toggle="tab"
+                aria-current="page"
+                >Home</a
+            >
+        </li>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="{{ url_for('custom') }}" class="nav-link active" data-bs-toggle="tab" aria-current="page"
+                >Custom</a
+            >   
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="#" class="nav-link disabled" data-bs-toggle="tab"
+                >Saved</a
+            >
+        </li>
+        <li class="nav-item" role="presentation" left>
+            <a href="#" class="nav-link disabled" data-bs-toggle="tab" style="text-align: right;"
+                >Login</a
+            >
+        </li>
+</ul>
+    
+    <!-- Tab panes -->
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="tab1Id" role="tabpanel">
+            
+        </div>
+        <div class="tab-pane fade" id="tab2Id" role="tabpanel"></div>
+        <div class="tab-pane fade" id="tab3Id" role="tabpanel"></div>
+        <div class="tab-pane fade" id="tab4Id" role="tabpanel"></div>
+        <div class="tab-pane fade" id="tab5Id" role="tabpanel"></div>
+    </div>
     <h1>Social Media Posts Creator</h1>
+    Or Choose Custom Option
+<form action="/custom" method="post">
+    <input type="submit" value="Custom">
+</form>
+<br>
 <form action="/send_bot" method="post">
     Topic: <input type="text" name="topic" id="topic" required><br><br>
     Goal: <input type="text" name="goal" id="goal"><br><br>
@@ -29,12 +91,7 @@
     Context:<input type="text" id="details" name="details" size="50px" required><br><br>
     More details: <br> <textarea id="more_information" name="more_information" rows="4" cols="50"></textarea><br><br>
     <input type="submit" value="Submit"> 
-    </form>
-    OR <br>
-    Choose Custom Opiton:
-    <form action="/custom" method="post">
-        <input type="submit" value="Custom">
-    </form>
+</form>
 {{ error }} {{ pdf_result }}
 <br>
 {% if respond %}
@@ -44,6 +101,14 @@
 {% endif %}
 {% if pdf_result %}
 <a href="{{ url_for('static', filename='pdf/post_SocialMedias_({today_date}).pdf') }}" download>Pobierz PDF</a>
+<form action="/save_pdf">
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+        Zapisz
+    </button>
+</form>
 {% endif %}
 <br>
 {% if respond %}
