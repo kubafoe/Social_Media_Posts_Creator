@@ -1,8 +1,14 @@
+@import "functions";
+
 *{
     text-align: center;
 }
 body{
-    background: linear-gradient(to top left, whitesmoke, aqua);
+    background: rgb(255, 255, 255);
+}
+
+html{
+    background: rgb(255, 255, 255);
 }
 
 p #odpowiedz{

@@ -1,10 +1,10 @@
 <!-- 
-Stówrz nawigacyjne menu z możliwością wybierania elemntu oraz , na dole możliwość zalogowania się 
 Logowanie = baza danych login sqlite
 Po zalogowaniu się użytkownik bedzie mógł pobrać pdf z postami oraz wogole zapisywać dane do PDF  
 Dodaj ID do dokumentów PDF jak i odpowiedzi wygenerowanych przez Chat id - niech będzie unikalne do użytkownika
+Również stwórz navbara żeby przerzucał na stronę logowanie.html dane z html do logowanie.php
 Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (API/Make.com) linkedin/google sheets. 
--->
+Stwórz html -> Rejestracja oraz backend dla rejestacji -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +30,8 @@ Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (
 </head>
 <body>
     <!-- Nav tabs -->
-<ul
+<nav class="navbar-dark bg-dark">
+    <ul
         class="nav nav-tabs"
         id="navId"
         role="tablist"
@@ -38,15 +39,14 @@ Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (
         <li class="nav-item">
             <a
                 href="{{ url_for('index') }}"
-                class="nav-link"
-                data-bs-toggle="tab"
+                class="nav-link active"
                 aria-current="page"
                 >Home</a
             >
         </li>
         </li>
-        <li class="nav-item" role="presentation">
-            <a href="{{ url_for('custom') }}" class="nav-link active" data-bs-toggle="tab" aria-current="page"
+        <li class="nav-item">
+            <a href="{{ url_for('custom') }}" class="nav-link"  aria-current="page"
                 >Custom</a
             >   
         </li>
@@ -56,12 +56,12 @@ Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (
             >
         </li>
         <li class="nav-item" role="presentation" left>
-            <a href="#" class="nav-link disabled" data-bs-toggle="tab" style="text-align: right;"
+            <a href="{{ url_for('login_page') }}" class="nav-link"
                 >Login</a
             >
         </li>
 </ul>
-    
+</nav>
     <!-- Tab panes -->
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="tab1Id" role="tabpanel">
@@ -75,9 +75,11 @@ Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (
     <h1>Social Media Posts Creator</h1>
     Or Choose Custom Option
 <form action="/custom" method="post">
-    <input type="submit" value="Custom">
+    <input type="submit" value="Custom" class="btn btn-dark">
 </form>
 <br>
+
+<div class="mb-3" style="text-align: center">
 <form action="/send_bot" method="post">
     Topic: <input type="text" name="topic" id="topic" required><br><br>
     Goal: <input type="text" name="goal" id="goal"><br><br>
@@ -90,9 +92,19 @@ Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (
         </select><br><br>
     Context:<input type="text" id="details" name="details" size="50px" required><br><br>
     More details: <br> <textarea id="more_information" name="more_information" rows="4" cols="50"></textarea><br><br>
-    <input type="submit" value="Submit"> 
+    <input type="submit" value="Submit"  class="btn btn-primary"> 
 </form>
 {{ error }} {{ pdf_result }}
+<br>
+</div>
+{% if respond %}
+<div id="wygenerowany_elemnt">
+    Answer:
+    <p id="answer"> 
+       <textarea class="form-control" name="prompt" id="prompt" readonly=True rows="8" cols="60"> {{ respond }} </textarea>
+    </p>
+</div>
+{% endif %}
 <br>
 {% if respond %}
   <form method="POST" action="/download_pdf">
@@ -109,19 +121,6 @@ Opcjonalne Po akceptacji post zostaje eksportowany do json/csv i przesłany do (
         Zapisz
     </button>
 </form>
-{% endif %}
-<br>
-{% if respond %}
-<hr/>
-{% endif %}
-<div id="wygenerowany_elemnt">
-    Odpowiedź:
-    <p id="odpowiedz">
-       <textarea name="prompt" id="prompt" readonly=True rows="8" cols="60"> {{ respond }} </textarea>
-    </p>
-</div>
-{% if respond %}
-<hr/>
 {% endif %}
 </body>
 </html>

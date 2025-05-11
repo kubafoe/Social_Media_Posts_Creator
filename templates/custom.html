@@ -9,7 +9,8 @@
 </head>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<ul
+<nav class="navbar-dark bg-dark">
+    <ul
         class="nav nav-tabs"
         id="navId"
         role="tablist"
@@ -18,14 +19,13 @@
             <a
                 href="{{ url_for('index') }}"
                 class="nav-link"
-                data-bs-toggle="tab"
                 aria-current="page"
                 >Home</a
             >
         </li>
         </li>
         <li class="nav-item" role="presentation">
-            <a href="{{ url_for('custom') }}" class="nav-link active" data-bs-toggle="tab" aria-current="page"
+            <a href="{{ url_for('custom') }}" class="nav-link active"  aria-current="page"
                 >Custom</a
             >   
         </li>
@@ -35,11 +35,12 @@
             >
         </li>
         <li class="nav-item" role="presentation" left>
-            <a href="#" class="nav-link disabled" data-bs-toggle="tab" style="text-align: right;"
+            <a href="{{ url_for('login_page') }}" class="nav-link"
                 >Login</a
             >
         </li>
 </ul>
+</nav>
     
     <!-- Tab panes -->
     <div class="tab-content" id="myTabContent">
@@ -56,15 +57,15 @@
 <br>
 <form action="/" method="get">
     Nah i go back <br>
-    <input type="submit" value="Back">
+    <input type="submit" value="Back" class="btn btn-dark">
 </form>
 <br>
 <h2>Form</h2>
 <form action="/send_data_custom" method="post">
-    <br><br>
+    <br>
     <textarea name="custom_prompt" id="custom_prompt" cols="40" rows="10"></textarea>
     <br><hr>
-    <input type="submit" value="Submit"> 
+    <input type="submit" value="Submit" class="btn-primary"> 
 </form>
 {{ error }}{{ pdf_result_custom }}
 <br>

@@ -18,6 +18,9 @@ app.secret_key = os.getenv('SECRET_KEY')
 def index():
     return render_template('index.html') 
 
+@app.route('/login_page', methods=["GET"])
+def login_page():
+    return render_template('login.html') 
 
 @app.route('/download_pdf', methods=['POST'])
 def download_pdf_route():
@@ -30,6 +33,7 @@ def send_bot_route():
 
 @app.route('/custom', methods=["POST", "GET"])
 def custom():
+    print("Custom page loaded")
     return render_template("custom.html")
 
 @app.route('/send_data_custom', methods=["POST","GET"])

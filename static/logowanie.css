@@ -1,0 +1,20 @@
+h1{
+    text-align: center;
+}
+
+.dane{
+    font-size: 40px;
+}
+#pdf_odpowiedz{
+    text-align: left;
+    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size-adjust: 0.545;
+    letter-spacing: 0.2rem;
+}
+
+footer {
+    font-size: 12px;
+    position: relative;
+    text-align: center;
+}

@@ -1,0 +1,11 @@
+# Folders with temporary files
+config.py
+.env
+.pytest_cache
+instance
+/static/pdf
+__pycache__
+# Virtual enviroment
+virtualENV
+# Database
+users.db
