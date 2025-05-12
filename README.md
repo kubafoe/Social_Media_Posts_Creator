@@ -1,15 +1,21 @@
 # Social Media Posts Creator
 
-The **Social Media Posts Creator** is a powerful tool designed to streamline the process of creating, scheduling, and managing social media content. Whether you're a marketer, influencer, or business owner, this tool helps you maintain a consistent online presence with minimal effort.
+The **Social Media Posts Creator** is a web application designed to simplify the process of creating social media posts. It integrates with a local AI model (Ollama) to generate post suggestions based on user-provided prompts. Users can download the generated posts as PDFs. Additionally, there is a "Custom" option that allows users to generate posts without using a form interface.
 
 ## Features
 
-- **Multi-Platform Support**: Create posts tailored for platforms like Facebook, Instagram, Twitter, and LinkedIn.
-- **Customizable Templates**: Design reusable templates to ensure consistent branding across all posts.
-- **Scheduling**: Plan and schedule posts to be published at optimal times.
-- **Analytics Integration**: Track engagement metrics to measure the performance of your posts.
+- **AI-Powered Post Suggestions**: Generate social media posts using a local AI model (Ollama).
+- **PDF Export**: Download generated posts as PDF files.
+- **Custom Mode**: Create posts without using the form interface.
+- **Multi-Platform Support**: Tailor posts for platforms like Facebook, Instagram, Twitter, and LinkedIn.
 - **User-Friendly Interface**: Intuitive design for easy navigation and content creation.
-- **Collaboration Tools**: Share drafts and collaborate with team members.
+
+## Prerequisites
+
+To use this application, you need to install the Ollama program and select the `gemma3` model. Follow these steps:
+
+1. Download and install Ollama from their official website: [Ollama](https://ollama.ai/).
+2. Set up the `gemma3` model within Ollama.
 
 ## Installation
 
@@ -25,6 +31,10 @@ The **Social Media Posts Creator** is a powerful tool designed to streamline the
    ```bash
    npm install
    ```
+4. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Usage
 
@@ -32,11 +42,11 @@ The **Social Media Posts Creator** is a powerful tool designed to streamline the
    ```bash
    npm start
    ```
-2. Log in or create an account.
-3. Select a platform and choose a template or create a new one.
-4. Customize your post with text, images, and hashtags.
-5. Schedule the post or publish it immediately.
-6. Use the analytics dashboard to monitor performance.
+2. Use the form to input a prompt for the AI to generate a post.
+3. Customize the generated post and download it as a PDF.
+4. Alternatively, use the "Custom" option to generate posts without the form interface.
+
+**Note**: The login functionality is currently not operational.
 
 ## Contributing
 
