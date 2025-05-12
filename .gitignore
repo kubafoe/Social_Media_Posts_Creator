@@ -9,3 +9,7 @@ __pycache__
 virtualENV
 # Database
 users.db
+# Files to update
+login.php
+test_pdf.py
+testy.py

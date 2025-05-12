@@ -8,12 +8,13 @@ from config import BASE_DIR,WKHTMLTOPDF_PATH
 from dotenv import load_dotenv
 from flask import app, request, render_template,session
 
-os.chdir("D:\\Programowanie\\Projekt-Formularz-do-Tworzenia postów-w-Social-Mediach")
-
-# Wczytaj sekretny klucz
+# Load files from .env
 load_dotenv()
 app.secret_key = os.getenv('SECRET_KEY')
 
+CHR_DIR_PATH = os.getenv('CHR_DIR_PATH')
+print (CHR_DIR_PATH)
+os.chdir(CHR_DIR_PATH)
 
 # Read data_form -> Create PDF 
 def download_pdf():
@@ -37,8 +38,8 @@ def download_pdf():
     print("")
     print(f"Variable respond for function download_pdf() ")
 
-    
     today_date = dt.datetime.today().strftime("%d_%m_%Y_%H_%M")
+
     context = {
     'form':form,
     'platform': form["platform"],
@@ -52,7 +53,7 @@ def download_pdf():
 
     print("Content was generated")
 
-    template_loader = jinja2.FileSystemLoader("D:\\Programowanie\\Projekt-Formularz-do-Tworzenia postów-w-Social-Mediach\\templates")
+    template_loader = jinja2.FileSystemLoader(F"{CHR_DIR_PATH}\\templates")
     template_env = jinja2.Environment(loader=template_loader)
     
     print("Check if folder exists:", os.path.exists("templates"))
@@ -88,7 +89,7 @@ def download_pdf_custom():
     'date': today_date 
     }
 
-    template_loader = jinja2.FileSystemLoader("D:\\Programowanie\\Projekt-Formularz-do-Tworzenia postów-w-Social-Mediach\\templates")
+    template_loader = jinja2.FileSystemLoader(F"{CHR_DIR_PATH}\\templates")
     template_env = jinja2.Environment(loader=template_loader)
     
     print("Check if folder exists", os.path.exists("templates"))
